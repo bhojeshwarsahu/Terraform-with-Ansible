@@ -18,7 +18,7 @@ stages {
 
     stage('Staging infrastructure') {
         when {
-            branch 'staging'
+            branch 'stage'
         }
         steps {
             script {
