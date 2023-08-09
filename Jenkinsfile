@@ -8,12 +8,12 @@ pipeline {
         stage('Set AWS Credentials') {
             steps {
                 script {
-                    // Retrieve AWS credentials using the credentials() function
                     def awsCredentials = credentials('aws-jenkins')
-
-                    // Assign credentials to environment variables
                     env.AWS_ACCESS_KEY_ID = awsCredentials.accessKey
                     env.AWS_SECRET_ACCESS_KEY = awsCredentials.secretKey
+
+                    echo "AWS_ACCESS_KEY_ID: ${env.AWS_ACCESS_KEY_ID}"
+                    echo "AWS_SECRET_ACCESS_KEY: ${env.AWS_SECRET_ACCESS_KEY}"
                 }
             }
         }
