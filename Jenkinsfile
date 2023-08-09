@@ -1,19 +1,32 @@
 pipeline {
     agent any
-
-
-stages {
-    stage('dev infrastructure') {
+    tools {
+       terraform 'terraform'
+    }
+    stages {
+        stage('aws credential') {
+            steps {
+                withCredentials([
+                    [
+                        $class: 'AmazonWebServicesCredentialsBinding',
+                        credentialsId: 'aws-jenkins',
+                        accessKeyVariable: 'AWS_ACCESS_KEY_ID',
+                        secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
+                    ]
+                ]) {
+                    // This block can be left empty or you can add steps that require AWS credentials
+                }
+            }
+        }
+        stage('dev infrastructure') {
         when {
             branch 'dev'
         }
         steps {
             script {
-					withCredentials([string(credentialsId: 'aws-jenkins', variable: 'AWS_ACCESS_KEY_ID'),
-					string(credentialsId: 'aws-jenkins', variable: 'AWS_SECRET_ACCESS_KEY')]) {
-					sh 'terraform init'
-					sh 'terraform plan -var-file="dev-terraform.tfvars"'
-				}                              
+                sh 'terraform init'
+
+                sh 'terraform plan -var-file="dev-terraform.tfvars"'
             }
         }
     }
@@ -24,12 +37,10 @@ stages {
         }
         steps {
             script {
-					withCredentials([string(credentialsId: 'aws-jenkins', variable: 'AWS_ACCESS_KEY_ID'),
-					string(credentialsId: 'aws-jenkins', variable: 'AWS_SECRET_ACCESS_KEY')]) {
-					sh 'terraform init -reconfigure'
-					sh 'terraform plan -var-file="stage-terraform.tfvars"'
-					sh 'terraform apply -var-file="stage-terraform.tfvars" --auto-approve'
-				}                              
+                sh 'terraform init -reconfigure'
+
+                sh 'terraform plan -var-file="stage-terraform.tfvars"'
+                sh 'terraform apply -var-file="stage-terraform.tfvars" --auto-approve'
             }
         }
     }
@@ -40,14 +51,12 @@ stages {
         }
         steps {
             script {
-					withCredentials([string(credentialsId: 'aws-jenkins', variable: 'AWS_ACCESS_KEY_ID'),
-					string(credentialsId: 'aws-jenkins', variable: 'AWS_SECRET_ACCESS_KEY')]) {
-					sh 'terraform init'
-					sh 'terraform plan -var-file="prod-terraform.tfvars"'
-					sh 'terraform apply -var-file="prod-terraform.tfvars" --auto-approve'
-				}                              
-            }
+                sh 'terraform init'
+
+                sh 'terraform plan -var-file="prod-terraform.tfvars"'
+                sh 'terraform apply -var-file="prod-terraform.tfvars" --auto-approve'
+				}
 			}
 		}
-	}
+	}  
 }
