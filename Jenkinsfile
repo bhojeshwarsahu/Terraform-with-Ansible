@@ -3,13 +3,21 @@ pipeline {
     tools {
        terraform 'terraform'
     }
-	
-    environment {
-        AWS_ACCESS_KEY_ID = credentials('aws-jenkins').accessKey
-        AWS_SECRET_ACCESS_KEY = credentials('aws-jenkins').secretKey
-    }
-    
+
     stages {
+        stage('Set AWS Credentials') {
+            steps {
+                script {
+                    // Retrieve AWS credentials using the credentials() function
+                    def awsCredentials = credentials('aws-jenkins')
+
+                    // Assign credentials to environment variables
+                    env.AWS_ACCESS_KEY_ID = awsCredentials.accessKey
+                    env.AWS_SECRET_ACCESS_KEY = awsCredentials.secretKey
+                }
+            }
+        }
+
         stage('dev infrastructure') {
             when {
                 branch 'dev'
@@ -21,7 +29,7 @@ pipeline {
                 }
             }
         }
-    
+
         stage('Staging infrastructure') {
             when {
                 branch 'stage'
@@ -34,7 +42,7 @@ pipeline {
                 }
             }
         }
-    
+
         stage('Production infrastructure') {
             when {
                 branch 'master'
