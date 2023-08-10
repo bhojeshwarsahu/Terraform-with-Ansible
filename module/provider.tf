@@ -9,7 +9,7 @@ locals {
 
 provider "aws" {
   alias = "deployer"
-  region = "us-east-1"
+  region = "us-east-2"
   access_key = local.provider_keys["access_key"]
   secret_key = local.provider_keys["secret_key"]
 }
