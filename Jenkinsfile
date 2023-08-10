@@ -4,10 +4,7 @@ pipeline {
        terraform 'terraform'
     }
 	
-    environment {
-        AWS_CREDENTIALS = credentials('aws-jenkins')
-    }
-    
+      
     stages {
         stage('dev infrastructure') {
             when {
@@ -15,6 +12,9 @@ pipeline {
             }
             steps {
                 script {
+							withCredentials([<object of type com.cloudbees.jenkins.plugins.awscredentials.AmazonWebServicesCredentialsBinding>]) {
+							// some block
+							}	
                     sh 'terraform init'
                     sh 'terraform plan -var-file="dev-terraform.tfvars"'
                 }
@@ -27,6 +27,9 @@ pipeline {
             }
             steps {
                 script {
+						withCredentials([<object of type com.cloudbees.jenkins.plugins.awscredentials.AmazonWebServicesCredentialsBinding>]) {
+						// some block
+					}
                     sh 'terraform init -reconfigure'
                     sh 'terraform plan -var-file="stage-terraform.tfvars"'
                     sh 'terraform apply -var-file="stage-terraform.tfvars" --auto-approve'
@@ -40,6 +43,9 @@ pipeline {
             }
             steps {
                 script {
+						withCredentials([<object of type com.cloudbees.jenkins.plugins.awscredentials.AmazonWebServicesCredentialsBinding>]) {
+					// some block
+					}
                     sh 'terraform init'
                     sh 'terraform plan -var-file="prod-terraform.tfvars"'
                     sh 'terraform apply -var-file="prod-terraform.tfvars" --auto-approve'
