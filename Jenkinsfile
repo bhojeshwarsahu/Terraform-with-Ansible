@@ -33,7 +33,7 @@ pipeline {
                     sh 'terraform init -reconfigure'
                     sh 'terraform plan -var-file="stage-terraform.tfvars"'
                     sh 'terraform apply -var-file="stage-terraform.tfvars" --auto-approve'
-		    sh "terraform state rm data.aws_secretsmanager_secret_version.provider_keys"
+		    
 
                 }
             }
@@ -51,7 +51,7 @@ pipeline {
                     sh 'terraform init'
                     sh 'terraform plan -var-file="prod-terraform.tfvars"'
                     sh 'terraform apply -var-file="prod-terraform.tfvars" --auto-approve'
-		    sh "terraform state rm data.aws_secretsmanager_secret_version.provider_keys"
+		    
 
                 }
             }
