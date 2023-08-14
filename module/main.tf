@@ -182,6 +182,13 @@ resource "aws_security_group" "frontend-sg" {
     protocol    = "tcp"
     security_groups = [aws_security_group.allow22and80port.id]
   }
+  ingress {
+   description = "ssh ingress"
+   from_port   = 22
+   to_port     = 22
+   protocol    = "tcp"
+   cidr_blocks = ["0.0.0.0/0"]
+ }
 
   egress {
     from_port   = 0
@@ -230,6 +237,13 @@ resource "aws_security_group" "backend-sg" {
     protocol    = "tcp"
     security_groups = [aws_security_group.frontend-sg.id]
   }
+  ingress {
+   description = "ssh ingress"
+   from_port   = 22
+   to_port     = 22
+   protocol    = "tcp"
+   cidr_blocks = ["0.0.0.0/0"]
+ }
 
   egress {
     from_port   = 0
@@ -278,6 +292,13 @@ resource "aws_security_group" "mysql-sg" {
     protocol    = "tcp"
     security_groups = [aws_security_group.backend-sg.id]
   }
+  ingress {
+   description = "ssh ingress"
+   from_port   = 22
+   to_port     = 22
+   protocol    = "tcp"
+   cidr_blocks = ["0.0.0.0/0"]
+ }
 
   egress {
     from_port   = 0
