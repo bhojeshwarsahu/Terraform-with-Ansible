@@ -160,6 +160,11 @@ resource "aws_instance" "nginx-instance" {
   tags = {
     Name = "nginx-instance"
   }
+  user_data = <<-EOF
+    #!/bin/bash
+    adduser ansible --disabled-password --gecos ""
+    echo "newuser ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/newuser
+  EOF
 }
 ############creating frontend sg#############
 ##### Allow traffic from Nginx security group to Frontend security group########
@@ -203,6 +208,11 @@ resource "aws_instance" "frontend-instance" {
   tags = {
     Name = "frontend-instance"
   }
+  user_data = <<-EOF
+    #!/bin/bash
+    adduser ansible --disabled-password --gecos ""
+    echo "newuser ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/newuser
+  EOF
 }
 ############creating backend sg#############
 ##### Allow traffic from Frontend security group to Backend security group########
@@ -245,6 +255,11 @@ resource "aws_instance" "backend-instance" {
   tags = {
     Name = "backend-instance"
   }
+  user_data = <<-EOF
+    #!/bin/bash
+    adduser ansible --disabled-password --gecos ""
+    echo "newuser ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/newuser
+  EOF
 }
 
 ############creating database-mysql sg#############
@@ -289,6 +304,11 @@ resource "aws_instance" "mysql-instance" {
   tags = {
     Name = "mysql-instance"
   }
+  user_data = <<-EOF
+    #!/bin/bash
+    adduser ansible --disabled-password --gecos ""
+    echo "newuser ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/newuser
+  EOF
 }
 
 
