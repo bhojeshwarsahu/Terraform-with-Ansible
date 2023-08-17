@@ -162,9 +162,14 @@ resource "aws_instance" "nginx-instance" {
   }
   user_data = <<-EOF
     #!/bin/bash
-    adduser ansible --disabled-password --gecos ""
-    echo "newuser ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/newuser
-  EOF
+    # Add the ansible user
+    sudo useradd -m -s /bin/bash ansible
+
+    # Add the Ansible Server's public key to ansible user's authorized_keys
+    echo "$(cat ansible_key.pub)" >> /home/ansible/.ssh/authorized_keys
+
+    # ... other user data commands ...
+    EOF
 }
 ############creating frontend sg#############
 ##### Allow traffic from Nginx security group to Frontend security group########
@@ -217,9 +222,14 @@ resource "aws_instance" "frontend-instance" {
   }
   user_data = <<-EOF
     #!/bin/bash
-    adduser ansible --disabled-password --gecos ""
-    echo "newuser ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/newuser
-  EOF
+    # Add the ansible user
+    sudo useradd -m -s /bin/bash ansible
+
+    # Add the Ansible Server's public key to ansible user's authorized_keys
+    echo "$(cat ansible_key.pub)" >> /home/ansible/.ssh/authorized_keys
+
+    # ... other user data commands ...
+    EOF
 }
 ############creating backend sg#############
 ##### Allow traffic from Frontend security group to Backend security group########
@@ -271,9 +281,14 @@ resource "aws_instance" "backend-instance" {
   }
   user_data = <<-EOF
     #!/bin/bash
-    adduser ansible --disabled-password --gecos ""
-    echo "newuser ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/newuser
-  EOF
+    # Add the ansible user
+    sudo useradd -m -s /bin/bash ansible
+
+    # Add the Ansible Server's public key to ansible user's authorized_keys
+    echo "$(cat ansible_key.pub)" >> /home/ansible/.ssh/authorized_keys
+
+    # ... other user data commands ...
+    EOF
 }
 
 ############creating database-mysql sg#############
@@ -327,9 +342,12 @@ resource "aws_instance" "mysql-instance" {
   }
   user_data = <<-EOF
     #!/bin/bash
-    adduser ansible --disabled-password --gecos ""
-    echo "newuser ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/newuser
-  EOF
+    # Add the ansible user
+    sudo useradd -m -s /bin/bash ansible
+
+    # Add the Ansible Server's public key to ansible user's authorized_keys
+    echo "$(cat ansible_key.pub)" >> /home/ansible/.ssh/authorized_keys
+
+    # ... other user data commands ...
+    EOF
 }
-
-
